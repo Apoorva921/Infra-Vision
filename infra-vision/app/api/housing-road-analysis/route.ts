@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+﻿import { NextResponse } from "next/server";
 import fs from "fs";
 import path from "path";
 
@@ -38,24 +38,33 @@ export async function GET() {
     const data = rows.map(cols =>
       Object.fromEntries(headers.map((h, i) => {
         const value = cols[i] || "";
-        // Try to parse as number if possible
         const numValue = parseFloat(value);
         return [h.trim(), isNaN(numValue) ? value : numValue];
       }))
     );
 
-    // Calculate summary statistics
-    const avgDensity = data.reduce((sum, d) => sum + (d.Avg_Density || 0), 0) / data.length;
-    const avgInfraScore = data.reduce((sum, d) => sum + (d.Infrastructure_Score || 0), 0) / data.length;
-    const avgCongestion = data.reduce((sum, d) => sum + (d.Congestion_Level || 0), 0) / data.length;
-    const totalHousing = data.reduce((sum, d) => sum + (d.Total_Housing_Units || 0), 0);
-    const totalRoadLength = data.reduce((sum, d) => sum + (d.Total_Road_Length_KM || 0), 0);
+    // ----------------------------
+    // SAFE STATISTICS (FIXED)
+    // ----------------------------
+    const safeNum = (v: any) => {
+      const n = Number(v);
+      return Number.isFinite(n) ? n : 0;
+    };
 
-    // Get model metrics from first row (they should be the same)
+    const total = (arr: any[], key: string) =>
+      arr.reduce((sum, d) => sum + safeNum(d[key]), 0);
+
+    const avgDensity = data.length ? total(data, "Avg_Density") / data.length : 0;
+    const avgInfraScore = data.length ? total(data, "Infrastructure_Score") / data.length : 0;
+    const avgCongestion = data.length ? total(data, "Congestion_Level") / data.length : 0;
+
+    const totalHousing = total(data, "Total_Housing_Units");
+    const totalRoadLength = total(data, "Total_Road_Length_KM");
+
     const modelMetrics = {
-      r2Score: data[0]?.Model_R2_Score || 0,
-      mse: data[0]?.Model_MSE || 0,
-      mae: data[0]?.Model_MAE || 0
+      r2Score: safeNum(data[0]?.Model_R2_Score),
+      mse: safeNum(data[0]?.Model_MSE),
+      mae: safeNum(data[0]?.Model_MAE)
     };
 
     const summary = {
@@ -78,4 +87,3 @@ export async function GET() {
     return NextResponse.json({ error: "Data load failed" }, { status: 500 });
   }
 }
-

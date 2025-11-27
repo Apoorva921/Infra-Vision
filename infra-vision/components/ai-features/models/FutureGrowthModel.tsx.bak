@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import { useState, useEffect, useMemo } from 'react';
 import { motion } from 'motion/react';
@@ -147,7 +147,7 @@ function trainGrowthModel(data: GrowthData[]) {
   
   const intercept = yMean - coefficients.reduce((sum, coef, i) => sum + coef * means[i], 0);
   
-  // Calculate RÂ²
+  // Calculate R²
   const predictions = X.map(row => 
     intercept + coefficients.reduce((sum, coef, i) => sum + coef * row[i], 0)
   );
@@ -211,21 +211,21 @@ function getZoneSummary(data: GrowthData[], zone: string): ZoneSummary | null {
 // Get growth status label
 function getGrowthStatus(growthPercent: number): { label: string; color: string; icon: string } {
   if (isNaN(growthPercent) || !isFinite(growthPercent)) {
-    return { label: 'Insufficient Data', color: 'text-gray-400', icon: 'âšªï¸' };
+    return { label: 'Insufficient Data', color: 'text-gray-400', icon: '⚪️' };
   }
   if (growthPercent >= 20) {
-    return { label: 'High Growth', color: 'text-green-400', icon: 'ðŸ“ˆ' };
+    return { label: 'High Growth', color: 'text-green-400', icon: '📈' };
   }
   if (growthPercent >= 10) {
-    return { label: 'Moderate Growth', color: 'text-yellow-400', icon: 'ðŸŸ ' };
+    return { label: 'Moderate Growth', color: 'text-yellow-400', icon: '🟠' };
   }
   if (growthPercent >= 1) {
-    return { label: 'Low Growth', color: 'text-orange-400', icon: 'ðŸŸ¡' };
+    return { label: 'Low Growth', color: 'text-orange-400', icon: '🟡' };
   }
   if (growthPercent > -1) {
-    return { label: 'Flat', color: 'text-gray-400', icon: 'âšªï¸' };
+    return { label: 'Flat', color: 'text-gray-400', icon: '⚪️' };
   }
-  return { label: 'Declining', color: 'text-red-400', icon: 'ðŸ“‰' };
+  return { label: 'Declining', color: 'text-red-400', icon: '📉' };
 }
 
 export function FutureGrowthModel() {
@@ -374,7 +374,7 @@ export function FutureGrowthModel() {
                 <Brain className="w-5 h-5 text-orange-400" />
                 <span className="text-white font-semibold">Model Performance</span>
               </div>
-              <p className="text-gray-300 text-sm">RÂ² Score: <span className="text-orange-400 font-bold">{(model.r2 * 100).toFixed(2)}%</span></p>
+              <p className="text-gray-300 text-sm">R² Score: <span className="text-orange-400 font-bold">{(model.r2 * 100).toFixed(2)}%</span></p>
               <p className="text-gray-400 text-xs mt-1">Enhanced model with data imputation and minimum growth thresholds</p>
             </div>
           )}
@@ -522,7 +522,7 @@ export function FutureGrowthModel() {
                           <p className="text-gray-500 text-xs">{getZoneRegion(zone)}</p>
                         </div>
                         {!hasData && (
-                          <AlertCircle className="w-4 h-4 text-yellow-400" aria-label="Limited data - using estimates" />
+                          <AlertCircle className="w-4 h-4 text-yellow-400" title="Limited data - using estimates" />
                         )}
                       </div>
                       
@@ -573,4 +573,3 @@ export function FutureGrowthModel() {
     </div>
   );
 }
-

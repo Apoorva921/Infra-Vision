@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import { useState, useEffect, useMemo } from 'react';
 import { motion } from 'motion/react';
@@ -59,7 +59,7 @@ function linearRegression(x: number[], y: number[]): { slope: number; intercept:
   const slope = (n * sumXY - sumX * sumY) / (n * sumXX - sumX * sumX);
   const intercept = (sumY - slope * sumX) / n;
   
-  // Calculate RÂ²
+  // Calculate R²
   const yMean = sumY / n;
   const ssRes = y.reduce((sum, yi, i) => {
     const predicted = slope * x[i] + intercept;
@@ -109,7 +109,7 @@ export function HousingDensityAnalysis() {
             area: 0, // Not available in API data
             infrastructureScore: parseFloat(row.Infrastructure_Score) || 0,
             roadNetworkEfficiency: parseFloat(row.Road_Network_Efficiency) / 100 || 0
-          })).filter((d: any) => d.housingDensity > 0 && d.district);
+          })).filter(d => d.housingDensity > 0 && d.district);
           
           console.log(`Loaded ${data.length} districts`);
           setRawData(data);
@@ -143,13 +143,13 @@ export function HousingDensityAnalysis() {
             const data: HousingData[] = parsed.data.map((row: any) => ({
               zoneId: row['Zone ID'] || '',
               district: row.District || '',
-              housingDensity: parseFloat(row['Housing Density (people/kmÂ²)']) || 0,
+              housingDensity: parseFloat(row['Housing Density (people/km²)']) || 0,
               avgHouseholdSize: parseFloat(row['Avg Household Size']) || 0,
               projectedGrowth: parseFloat(row['Projected 10yr Growth (%)']) || 0,
-              area: parseFloat(row['Area (kmÂ²)']) || 0,
+              area: parseFloat(row['Area (km²)']) || 0,
               infrastructureScore: parseFloat(row['Infrastructure Score (0-100)']) || 0,
               roadNetworkEfficiency: parseFloat(row['Road Network Efficiency']) || 0
-            })).filter((d: any) => d.housingDensity > 0 && d.zoneId);
+            })).filter(d => d.housingDensity > 0 && d.zoneId);
             
             setRawData(data);
             trainModel(data);
@@ -351,13 +351,13 @@ export function HousingDensityAnalysis() {
             <CardHeader>
               <CardTitle className="text-white flex items-center gap-2">
                 <Brain className="w-6 h-6 text-cyan-400" />
-                ðŸ¤– Model Performance Metrics
+                🤖 Model Performance Metrics
               </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className="bg-gray-800 rounded-xl p-4 border border-gray-700">
-                  <p className="text-gray-400 text-sm mb-1">RÂ² Score</p>
+                  <p className="text-gray-400 text-sm mb-1">R² Score</p>
                   <p className="text-2xl font-bold text-cyan-400">{(modelMetrics.r2 * 100).toFixed(2)}%</p>
                   <p className="text-xs text-gray-500 mt-1">Model accuracy</p>
                 </div>
@@ -369,7 +369,7 @@ export function HousingDensityAnalysis() {
                 <div className="bg-gray-800 rounded-xl p-4 border border-gray-700">
                   <p className="text-gray-400 text-sm mb-1">Mean Absolute Error</p>
                   <p className="text-2xl font-bold text-purple-400">{modelMetrics.mae.toFixed(0)}</p>
-                  <p className="text-xs text-gray-500 mt-1">people/kmÂ²</p>
+                  <p className="text-xs text-gray-500 mt-1">people/km²</p>
                 </div>
               </div>
             </CardContent>
@@ -385,7 +385,7 @@ export function HousingDensityAnalysis() {
       >
         <Card className="bg-gray-900 border-gray-700 shadow-xl rounded-2xl">
           <CardHeader>
-            <CardTitle className="text-white">ðŸ“Š Housing Density by District</CardTitle>
+            <CardTitle className="text-white">📊 Housing Density by District</CardTitle>
           </CardHeader>
           <CardContent>
             <ResponsiveContainer width="100%" height={400}>
@@ -402,7 +402,7 @@ export function HousingDensityAnalysis() {
                 <YAxis 
                   stroke="#9ca3af"
                   tick={{ fill: '#9ca3af' }}
-                  label={{ value: 'Avg Density (people/kmÂ²)', angle: -90, position: 'insideLeft', fill: '#9ca3af' }}
+                  label={{ value: 'Avg Density (people/km²)', angle: -90, position: 'insideLeft', fill: '#9ca3af' }}
                 />
                 <Tooltip 
                   contentStyle={{ 
@@ -434,7 +434,7 @@ export function HousingDensityAnalysis() {
           <CardHeader>
             <CardTitle className="text-white flex items-center gap-2">
               <Home className="w-5 h-5 text-cyan-400" />
-              ðŸ˜ï¸ Top 10 Zones by Housing Density
+              🏘️ Top 10 Zones by Housing Density
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -458,7 +458,7 @@ export function HousingDensityAnalysis() {
                   }}
                 />
                 <Legend />
-                <Bar dataKey="density" name="Housing Density (people/kmÂ²)" fill="#10b981" radius={8} />
+                <Bar dataKey="density" name="Housing Density (people/km²)" fill="#10b981" radius={8} />
               </BarChart>
             </ResponsiveContainer>
           </CardContent>
@@ -475,7 +475,7 @@ export function HousingDensityAnalysis() {
           <CardHeader>
             <CardTitle className="text-white flex items-center gap-2">
               <TrendingUp className="w-5 h-5 text-cyan-400" />
-              ðŸ”® 10-Year Growth Predictions
+              🔮 10-Year Growth Predictions
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -503,7 +503,7 @@ export function HousingDensityAnalysis() {
                 <YAxis 
                   stroke="#9ca3af"
                   tick={{ fill: '#9ca3af' }}
-                  label={{ value: 'Density (people/kmÂ²)', angle: -90, position: 'insideLeft', fill: '#9ca3af' }}
+                  label={{ value: 'Density (people/km²)', angle: -90, position: 'insideLeft', fill: '#9ca3af' }}
                 />
                 <Tooltip 
                   contentStyle={{ 
@@ -544,7 +544,7 @@ export function HousingDensityAnalysis() {
           <CardHeader>
             <CardTitle className="text-white flex items-center gap-2">
               <Activity className="w-5 h-5 text-cyan-400" />
-              ðŸ”— Infrastructure Score vs Housing Density
+              🔗 Infrastructure Score vs Housing Density
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -565,7 +565,7 @@ export function HousingDensityAnalysis() {
                   name="Housing Density"
                   stroke="#9ca3af"
                   tick={{ fill: '#9ca3af' }}
-                  label={{ value: 'Housing Density (people/kmÂ²)', angle: -90, position: 'insideLeft', fill: '#9ca3af' }}
+                  label={{ value: 'Housing Density (people/km²)', angle: -90, position: 'insideLeft', fill: '#9ca3af' }}
                 />
                 <Tooltip 
                   cursor={{ strokeDasharray: '3 3' }}
@@ -597,7 +597,7 @@ export function HousingDensityAnalysis() {
           <CardHeader>
             <CardTitle className="text-white flex items-center gap-2">
               <Route className="w-5 h-5 text-cyan-400" />
-              ðŸ›£ï¸ Road Network Efficiency by District
+              🛣️ Road Network Efficiency by District
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -647,14 +647,14 @@ export function HousingDensityAnalysis() {
           <CardHeader>
             <CardTitle className="text-white flex items-center gap-2">
               <Brain className="w-6 h-6 text-cyan-400" />
-              ðŸ’¡ AI-Generated Insights
+              💡 AI-Generated Insights
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="p-4 bg-gray-800 rounded-xl border border-gray-700">
                 <p className="text-gray-200">
-                  <strong className="text-cyan-400">Highest Density:</strong> {topZones[0]?.zone} in {topZones[0]?.district} with {topZones[0]?.density.toFixed(0)} people/kmÂ²
+                  <strong className="text-cyan-400">Highest Density:</strong> {topZones[0]?.zone} in {topZones[0]?.district} with {topZones[0]?.density.toFixed(0)} people/km²
                 </p>
               </div>
               <div className="p-4 bg-gray-800 rounded-xl border border-gray-700">
@@ -679,5 +679,4 @@ export function HousingDensityAnalysis() {
     </div>
   );
 }
-
 

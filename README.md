@@ -113,5 +113,10 @@ The platform analyzes city infrastructure such as schools, hospitals, parks, roa
 
 InfraVision outperforms static GIS tools by offering predictive, scenario-based, and AI-driven urban intelligence.
 
+# ⭐ Support
+
+If you find this project useful, star the repository ⭐
+and feel free to share feedback or ideas!
+
 
 
